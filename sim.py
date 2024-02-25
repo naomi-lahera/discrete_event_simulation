@@ -1,100 +1,111 @@
-import sys
-from random_variable_generator import dis
+import numpy as np
+from statistics import mean
 
-def sim(arrival_distribution, departure_distribution, n, simulation_total_time):
-    # needed time to attend to all the customers
-    stimated_time = sys.maxsize
+def Series_Server(Total_Time, param_poisson, param_Server):
     
-    # time variable
-    time = 0
+    # Parámetros del sistema
+    n_servidores = len(param_Server)  # Número de servidores
+    tA =  0  # Tiempo de llegada
+    t_eventos = [float('inf')] * n_servidores  # Inicializar tiempos de eventos para cada servidor
+    NA, ND =  0,  0  # Contadores de llegadas y salidas
+    A = [[] for _ in range(n_servidores)]  # Listas para almacenar tiempos de llegada en cada servidor
+    D = []  # Lista para almacenar tiempos de salida
+    clientes_en_servicio = [0] * n_servidores  # Contadores de clientes en servicio para cada servidor
+
+    # Generar el primer tiempo de llegada
+    T0 = np.random.poisson(param_poisson)
+    tA = T0
+    t =  0
+
+    while tA <= Total_Time:
     
-    # sistem state variable
-    sistem_state = [0 for i in range(0, n)]
-    current_customers = [0 for i in range(0, n)]
-    event_list = [sys.maxsize for i in range(0, n+1)] # the arrival time is the last element of the array
-    
-    # counter variables
-    arrivalas_num = 0
-    departures_num = 0
-    
-    arrival_time = dict()
-    departure_time = dict()
-        
-    next_arrival = dis[arrival_distribution]()
-    event_list[n] = next_arrival # first customer arrival
-    
-    index_menor_element = sistem_state.index(min(sistem_state))
-    while(sistem_state[index_menor_element] < simulation_total_time):
-        # index_menor_element = sistem_state.index(min(sistem_state))
-        
-        # case 1
-        if index_menor_element == n:
-            time = event_list[n] # update global time
-            arrivalas_num = arrivalas_num + 1 # incress the customer that get into the simulation sistem
-            current_customers[0] = current_customers[0] + 1 # incress number of cuatomers at server 1
-            next_arrival = dis[arrival_distribution]() # generate the next arrival time
-            event_list[n] = next_arrival # update event list
-            
-            if current_customers[0] == 1: # update departure_time at server 1 because is the first customer taht get into de server 1
-                next_departure = dis[departure_distribution[0]]() # update the next departure
-                event_list[0] = time + next_departure # update event list
-                arrival_time(arrivalas_num, time) # update counter variables of the sistem
-        
+        print('event')
+        # Actualizar el tiempo actual y seleccionar el próximo evento
+        servidor_actual = np.argmin(t_eventos)  # Encontrar el servidor con el próximo evento
+        t = t_eventos[servidor_actual]
+
+        if tA <= t:
+            # Evento de llegada
+            NA +=  1
+            clientes_en_servicio[0] +=  1
+            A[0].append(t)
+            # Generar el próximo tiempo de llegada
+            T0 = np.random.poisson(param_poisson)
+            tA = t + T0
+            # Si hay espacio en el servidor, comienza el servicio
+            if clientes_en_servicio[0] ==  1:
+                Y = np.random.exponential(param_Server[0])
+                t_eventos[0] = t + Y
+                
         else:
-            # case 2
-            time = event_list[index_menor_element] # advance in time
-            current_customers[index_menor_element] = current_customers[index_menor_element] - 1 # update current customers at server i = index_menor_element - 1
-            
-            if current_customers[index_menor_element] == 0: # if there are no more customers at server i then the next departure time at server i is oo
-                event_list[index_menor_element] = sys.maxsize
+            clientes_en_servicio[servidor_actual] -=  1
+            # Si hay clientes en el servidor, generar el próximo tiempo de servicio
+            if clientes_en_servicio[servidor_actual] >  0:
+                Y = np.random.exponential(param_Server[servidor_actual])
+                t_eventos[servidor_actual] = t + Y
             else:
-                next_departure = dis[departure_distribution[index_menor_element]]()
-                event_list[index_menor_element] = next_departure
-            
-            
-            if index_menor_element != n - 1: # is not the last server
-                current_customers[index_menor_element + 1] = current_customers[index_menor_element + 1] + 1 # update current customers at server i + 1 = index_menor_element
-                 
-                if current_customers[index_menor_element + 1] == 1:
-                    next_departure = dis[departure_distribution[index_menor_element + 1]]()
-                    event_list[index_menor_element + 1] = time + next_departure
-            else: # is the last server
-                departures_num = departures_num + 1
-                departure_time(departures_num, time)
+                t_eventos[servidor_actual] = float('inf')
                 
-        index_menor_element = sistem_state.index(min(sistem_state))
-        
-    if index_menor_element > simulation_total_time:
-        if departures_num == arrivalas_num:
-            stimated_time = min(0, time - simulation_total_time)
-            print('needed time: ', stimated_time)
-            print('total customers that get into the sistem: ', arrivalas_num)
-            print('total customers that get out the sistem: ', departures_num)
-            
+            if servidor_actual >= n_servidores:
+                # Evento de finalización de servicio
+                ND +=  1
+                D.append(t)
+            else:
+                clientes_en_servicio[servidor_actual + 1] +=  1
+                A[servidor_actual].append(t)
+                # Si hay espacio en el servidor, comienza el servicio
+                if clientes_en_servicio[servidor_actual + 1] ==  1:
+                    Y = np.random.exponential(param_Server[servidor_actual + 1])
+                    t_eventos[servidor_actual + 1] = t + Y
+
+    # Procesar clientes restantes
+    while ND < NA:
+        print('event without time')
+        servidor_actual = np.argmin(t_eventos)
+        t = t_eventos[servidor_actual]
+
+        if tA <= t:
+            # Evento de llegada
+            NA +=  1
+            clientes_en_servicio[servidor_actual] +=  1
+            A[servidor_actual].append(t)
+            # Generar el próximo tiempo de llegada
+            T0 = np.random.poisson(param_poisson)
+            tA = t + T0
+            # Si hay espacio en el servidor, comienza el servicio
+            if clientes_en_servicio[servidor_actual] ==  1:
+                Y = np.random.exponential(param_Server[servidor_actual])
+                t_eventos[servidor_actual] = t + Y
         else:
-            sistem_state[n] = sys.maxsize
-            while departures_num < arrivalas_num:
-                   # case 2
-                time = event_list[index_menor_element] # advance in time
-                current_customers[index_menor_element] = current_customers[index_menor_element] - 1 # update current customers at server i = index_menor_element - 1
-
-                if current_customers[index_menor_element] == 0: # if there are no more customers at server i then the next departure time at server i is oo
-                    event_list[index_menor_element] = sys.maxsize
-                else:
-                    next_departure = dis[departure_distribution[index_menor_element]]()
-                    event_list[index_menor_element] = next_departure
-
-
-                if index_menor_element != n - 1: # is not the last server
-                    current_customers[index_menor_element + 1] = current_customers[index_menor_element + 1] + 1 # update current customers at server i + 1 = index_menor_element
-
-                    if current_customers[index_menor_element + 1] == 1:
-                        next_departure = dis[departure_distribution[index_menor_element + 1]]()
-                        event_list[index_menor_element + 1] = time + next_departure
-                else: # is the last server
-                    departures_num = departures_num + 1
-                    departure_time(departures_num, time)
+            clientes_en_servicio[servidor_actual] -=  1
+            # Si hay clientes en el servidor, generar el próximo tiempo de servicio
+            if clientes_en_servicio[servidor_actual] >  0:
+                Y = np.random.exponential(param_Server[servidor_actual])
+                t_eventos[servidor_actual] = t + Y
+            else:
+                t_eventos[servidor_actual] = float('inf')
                 
-                index_menor_element = sistem_state.index(min(sistem_state))
-   
-print([1, 2, 3, 4, 1].index(min([1, 2, 3, 4, 1])))
+            if servidor_actual >= n_servidores - 1:
+                # Evento de finalización de servicio
+                ND +=  1
+                D.append(t)
+            else:
+                clientes_en_servicio[servidor_actual + 1] +=  1
+                A[servidor_actual].append(t)
+                # Si hay espacio en el servidor, comienza el servicio
+                if clientes_en_servicio[servidor_actual + 1] ==  1:
+                    Y = np.random.exponential(param_Server[servidor_actual + 1])
+                    t_eventos[servidor_actual + 1] = t + Y
+
+    # Imprimir resultados
+    #print(f"Clientes atendidos: {NA}")
+    #print(f"Tiempo total de simulación: {t}")
+    #print(f"Tiempos de llegada en los servidores: {A}")
+    #print(f"Tiempos de salida: {D}")
+    return NA, t, A, D
+
+# Ejemplo de uso para  2 servidores
+NA, t, A, D = Series_Server(100,  5, [3,  4])
+print(NA, t, A, D)
+
+# Para calcular promedios, puedes usar el código proporcionado anteriormente
