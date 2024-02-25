@@ -1,8 +1,7 @@
 import numpy as np
 from statistics import mean
 
-def Series_Server(Total_Time, param_poisson, param_Server):
-    
+def Series_Server(Total_Time, param_poisson, param_Server):    
     # Parámetros del sistema
     n_servidores = len(param_Server)  # Número de servidores
     tA =  0  # Tiempo de llegada
@@ -84,15 +83,34 @@ def Series_Server(Total_Time, param_poisson, param_Server):
                 Y = np.random.exponential(param_Server[servidor_actual + 1])
                 t_eventos[servidor_actual + 1] = t + Y
                 
-    # Imprimir resultados
-    #print(f"Clientes atendidos: {NA}")
-    #print(f"Tiempo total de simulación: {t}")
-    #print(f"Tiempos de llegada en los servidores: {A}")
-    #print(f"Tiempos de salida: {D}")
     return NA, t, A, D
 
 # Ejemplo de uso para  2 servidores
-NA, t, A, D = Series_Server(100,  5, [3,  4])
-print(NA, t, A, D)
+# NA, t, A, D = Series_Server(10000,  5, [3,  4, 2, 9, 6])
 
+# Imprimir resultados
+# print(f"Clientes atendidos: {NA}")
+# print(f"Tiempo total de simulación: {t}")
+# print(f"Tiempos de llegada al sistema: {A}")
+# print(f"Tiempos de salida del sistema: {D}")
+# print(f"Timepo faltante: {t - 10000}")
+# print(F"Promedio de tiempo de un cliente en el sistema: {mean([D[i] - A[0][i] for i in range(NA)])}")
+
+total_Na = 0
+total_t = 0
+total_tiempo_faltante = 0
+total_promedio_tiempo_sistema = 0
+
+for _ in range(0, 10):
+    NA, t, A, D = Series_Server(10000,  5, [3,  4, 2, 9, 6])
+    total_Na += NA
+    total_t += t
+    total_tiempo_faltante += t - 10000
+    total_promedio_tiempo_sistema += mean([D[i] - A[0][i] for i in range(NA)])
+    
+print(f"Promedio de clientes atendidos: {total_Na / 10}")
+print(f"Promedio de tiempo total de simulación: {total_t / 10}")
+print(f"Promedio de tiempo faltante: {total_tiempo_faltante / 10}")
+print(f"Promedio de promedio de tiempo de un cliente en el sistema: {total_promedio_tiempo_sistema / 10}")
+    
 # Para calcular promedios, puedes usar el código proporcionado anteriormente
