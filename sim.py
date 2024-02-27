@@ -69,6 +69,7 @@ def Series_Server(Total_Time, param_poisson, param_Server):
     while ND < NA:
         # print('event without time')
         servidor_actual = np.argmin(t_eventos)
+        print(f'tiempo actual: {t} \n proxima llegada: {t_eventos[servidor_actual]} \n nuevo t: {t + t_eventos[servidor_actual]}')
         t += t_eventos[servidor_actual]
         # print('t: ', t)
         clientes_en_servicio[servidor_actual] -=  1
@@ -108,16 +109,21 @@ for _ in range(0, n):
     params = [np.random.randint(1, 20) for _ in range(0, 50)]
     print('params: ', params)
     total_time = 480 # 8 horas
-    NA, t, A, D = Series_Server(total_time,  np.random.random(), params)
-    total_Na += NA
-    total_t += t
-    total_tiempo_faltante += t - 100
-    total_promedio_tiempo_sistema += mean([D[i] - A[0][i] for i in range(NA)])
+    NA, t, A, D = Series_Server(total_time,  np.random.randint(15, 20), params)
+    # total_Na += NA
+    # total_t += t
+    # total_tiempo_faltante += t - 100
+    # total_promedio_tiempo_sistema += mean([D[i] - A[0][i] for i in range(NA)])
     
-print(f"Promedio de clientes atendidos: {total_Na / n}")
-print(f"Promedio de tiempo total de simulación: {total_t / n}")
-print(f"Promedio de tiempo faltante: {total_tiempo_faltante / n}")
-print(f"Promedio de promedio de tiempo de un cliente en el sistema: {total_promedio_tiempo_sistema / n}")
+print(f"Clientes atendidos: {NA}")
+print(f"Tiempo total de simulación: {t}")
+print(f"Tiempo faltante: {t - 480}")
+print(f"Promedio de tiempo de un cliente en el sistema: {sum([D[i] - A[0][i] for i in range(NA)]) / NA}")
+    
+# print(f"Promedio de clientes atendidos: {total_Na / n}")
+# print(f"Promedio de tiempo total de simulación: {total_t / n}")
+# print(f"Promedio de tiempo faltante: {total_tiempo_faltante / n}")
+# print(f"Promedio de promedio de tiempo de un cliente en el sistema: {total_promedio_tiempo_sistema / n}")
     
 # Para calcular promedios, puedes usar el código proporcionado anteriormente
 print('varianza: ', np.var([D[i] - A[0][i] for i in range(NA)]))
