@@ -24,63 +24,76 @@ def Series_Server(Total_Time, param_poisson, param_Server):
 
         if tA <= t_eventos[servidor_actual]:
             # Evento de llegada
+            print(f'tiempo actual: {t} \n proxima llegada: {tA} \n nuevo tA: {t + tA}')
+            t = tA
+            print('t: ', t)
             t = tA
             NA +=  1
             clientes_en_servicio[0] +=  1
             A[0].append(t)
             # Generar el próximo tiempo de llegada
             T0 = np.random.poisson(param_poisson)
+            # print(f'tiempo actual: {t} \\n proxima llegada: {T0} \\n nuevo tA: {t + T0}')
+            tA = T0
             tA = t + T0
             # Si hay espacio en el servidor, comienza el servicio
             if clientes_en_servicio[0] ==  1:
                 Y = np.random.exponential(param_Server[0])
-                t_eventos[0] = t + Y
+                t_eventos[0] = Y
                 
         else:
-            t = t_eventos[servidor_actual]
+            print(f'tiempo actual: {t} \n proxima llegada: {t_eventos[servidor_actual]} \n nuevo t: {t + t_eventos[servidor_actual]}')
+            t += t_eventos[servidor_actual]
+            # print('t: ', t)
             clientes_en_servicio[servidor_actual] -=  1
             # Si hay clientes en el servidor, generar el próximo tiempo de servicio
             if clientes_en_servicio[servidor_actual] >  0:
                 Y = np.random.exponential(param_Server[servidor_actual])
-                t_eventos[servidor_actual] = t + Y
+                t_eventos[servidor_actual] = Y
             else:
                 t_eventos[servidor_actual] = float('inf')
                 
             if servidor_actual >= n_servidores - 1:
                 # Evento de finalización de servicio
-                ND += 1
+                ND +=  1
                 D.append(t)
+                # print('tiempo en el sistema: ', t - A[0][len(D) - 1])
             else:
                 clientes_en_servicio[servidor_actual + 1] +=  1
                 A[servidor_actual + 1].append(t)
                 # Si hay espacio en el servidor, comienza el servicio
                 if clientes_en_servicio[servidor_actual + 1] ==  1:
                     Y = np.random.exponential(param_Server[servidor_actual + 1])
-                    t_eventos[servidor_actual + 1] = t + Y
+                    t_eventos[servidor_actual + 1] = Y
 
     # Procesar clientes restantes
     while ND < NA:
+        # print('event without time')
         servidor_actual = np.argmin(t_eventos)
+        print(f'tiempo actual: {t} \n proxima llegada: {t_eventos[servidor_actual]} \n nuevo t: {t + t_eventos[servidor_actual]}')
+        t += t_eventos[servidor_actual]
+        # print('t: ', t)
         t = t_eventos[servidor_actual]
         clientes_en_servicio[servidor_actual] -=  1
         # Si hay clientes en el servidor, generar el próximo tiempo de servicio
         if clientes_en_servicio[servidor_actual] >  0:
             Y = np.random.exponential(param_Server[servidor_actual])
-            t_eventos[servidor_actual] = t + Y
+            t_eventos[servidor_actual] = Y
         else:
             t_eventos[servidor_actual] = float('inf')
             
         if servidor_actual >= n_servidores - 1:
             # Evento de finalización de servicio
-            ND += 1
+            ND +=  1
             D.append(t)
+            # print('tiempo en el sistema: ', t - A[0][len(D) - 1])
         else:
             clientes_en_servicio[servidor_actual + 1] +=  1
             A[servidor_actual + 1].append(t)
             # Si hay espacio en el servidor, comienza el servicio
             if clientes_en_servicio[servidor_actual + 1] ==  1:
                 Y = np.random.exponential(param_Server[servidor_actual + 1])
-                t_eventos[servidor_actual + 1] = t + Y
+                t_eventos[servidor_actual + 1] = Y
                 
     return NA, t, A, D
 
