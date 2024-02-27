@@ -72,8 +72,17 @@ Los tiempos de servicio en el servidor i tienen la distribución Gi.
 
 - Objetivos y metas
     Nuestro objetivo al simular esta sistema es saber la media del tiempo que le toma a un cliente entrar y salir del sistema, así como la noción del rango de timepo que excede la salida del último cliente.
+
 - El sistema específico a simular y las variables de interés que cada equipo debe analizar se les hará saber por esta misma vía.
     - sistema: n servidores en serie
-    - variables: 
+    - variables de interes: 
+        - NA: Cantidad de clientes que entraron al sistema
+        - A: Tiempo en el que los clientes entran a acada servidor
+        - D: Tiempo en que los clientes alen del sistema
+        - t: Tiempo que toma hacer la simulacion
+
 - Variables que describen el problema
+    - n: cantidad de servidores
+    - M: Distribucion asociada a la llegada de los clientes
+    - Gi: Distribucion asociada al tiempo de que le toma al servidor i atender a un clinete.
     
