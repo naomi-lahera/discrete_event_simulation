@@ -1,4 +1,5 @@
 import numpy as np
+import random
 from statistics import mean
 
 def Series_Server(Total_Time, param_poisson, param_Server):    
@@ -17,19 +18,22 @@ def Series_Server(Total_Time, param_poisson, param_Server):
     t =  0
 
     while tA <= Total_Time:
-        print('event')
+        # print('event')
         # Actualizar el tiempo actual y seleccionar el próximo evento
         servidor_actual = np.argmin(t_eventos)  # Encontrar el servidor con el próximo evento
         # t = t_eventos[servidor_actual]
 
         if tA <= t_eventos[servidor_actual]:
             # Evento de llegada
+            print(f'tiempo actual: {t} \n proxima llegada: {tA} \n nuevo tA: {t + tA}')
             t = t + tA
+            print('t: ', t)
             NA +=  1
             clientes_en_servicio[0] +=  1
             A[0].append(t)
             # Generar el próximo tiempo de llegada
             T0 = np.random.poisson(param_poisson)
+            # print(f'tiempo actual: {t} \\n proxima llegada: {T0} \\n nuevo tA: {t + T0}')
             tA = t + T0
             # Si hay espacio en el servidor, comienza el servicio
             if clientes_en_servicio[0] ==  1:
@@ -37,7 +41,9 @@ def Series_Server(Total_Time, param_poisson, param_Server):
                 t_eventos[0] = t + Y
                 
         else:
+            print(f'tiempo actual: {t} \n proxima llegada: {t_eventos[servidor_actual]} \n nuevo t: {t + t_eventos[servidor_actual]}')
             t += t_eventos[servidor_actual]
+            # print('t: ', t)
             clientes_en_servicio[servidor_actual] -=  1
             # Si hay clientes en el servidor, generar el próximo tiempo de servicio
             if clientes_en_servicio[servidor_actual] >  0:
@@ -50,6 +56,7 @@ def Series_Server(Total_Time, param_poisson, param_Server):
                 # Evento de finalización de servicio
                 ND +=  1
                 D.append(t)
+                # print('tiempo en el sistema: ', t - A[0][len(D) - 1])
             else:
                 clientes_en_servicio[servidor_actual + 1] +=  1
                 A[servidor_actual + 1].append(t)
@@ -60,9 +67,10 @@ def Series_Server(Total_Time, param_poisson, param_Server):
 
     # Procesar clientes restantes
     while ND < NA:
-        print('event without time')
+        # print('event without time')
         servidor_actual = np.argmin(t_eventos)
         t += t_eventos[servidor_actual]
+        # print('t: ', t)
         clientes_en_servicio[servidor_actual] -=  1
         # Si hay clientes en el servidor, generar el próximo tiempo de servicio
         if clientes_en_servicio[servidor_actual] >  0:
@@ -75,6 +83,7 @@ def Series_Server(Total_Time, param_poisson, param_Server):
             # Evento de finalización de servicio
             ND +=  1
             D.append(t)
+            # print('tiempo en el sistema: ', t - A[0][len(D) - 1])
         else:
             clientes_en_servicio[servidor_actual + 1] +=  1
             A[servidor_actual + 1].append(t)
@@ -85,32 +94,30 @@ def Series_Server(Total_Time, param_poisson, param_Server):
                 
     return NA, t, A, D
 
-# Ejemplo de uso para  2 servidores
-# NA, t, A, D = Series_Server(10000,  5, [3,  4, 2, 9, 6])
-
-# Imprimir resultados
-# print(f"Clientes atendidos: {NA}")
-# print(f"Tiempo total de simulación: {t}")
-# print(f"Tiempos de llegada al sistema: {A}")
-# print(f"Tiempos de salida del sistema: {D}")
-# print(f"Timepo faltante: {t - 10000}")
-# print(F"Promedio de tiempo de un cliente en el sistema: {mean([D[i] - A[0][i] for i in range(NA)])}")
-
 total_Na = 0
 total_t = 0
 total_tiempo_faltante = 0
 total_promedio_tiempo_sistema = 0
 
-for _ in range(0, 10):
-    NA, t, A, D = Series_Server(10000,  5, [3,  4, 2, 9, 6])
+n = 1
+for _ in range(0, n):
+    # Cuando el parametro scale de la distribucion exponencial es 1 se antienden un promedio de 5 clientes
+    # Promedio de clientes atendidos: 5.0
+    params = [1 for _ in range(1, 50)]
+    # atienden de 1 a 20 clientes en 8 horas
+    params = [np.random.randint(1, 20) for _ in range(0, 50)]
+    print('params: ', params)
+    total_time = 480 # 8 horas
+    NA, t, A, D = Series_Server(total_time,  np.random.random(), params)
     total_Na += NA
     total_t += t
-    total_tiempo_faltante += t - 10000
+    total_tiempo_faltante += t - 100
     total_promedio_tiempo_sistema += mean([D[i] - A[0][i] for i in range(NA)])
     
-print(f"Promedio de clientes atendidos: {total_Na / 10}")
-print(f"Promedio de tiempo total de simulación: {total_t / 10}")
-print(f"Promedio de tiempo faltante: {total_tiempo_faltante / 10}")
-print(f"Promedio de promedio de tiempo de un cliente en el sistema: {total_promedio_tiempo_sistema / 10}")
+print(f"Promedio de clientes atendidos: {total_Na / n}")
+print(f"Promedio de tiempo total de simulación: {total_t / n}")
+print(f"Promedio de tiempo faltante: {total_tiempo_faltante / n}")
+print(f"Promedio de promedio de tiempo de un cliente en el sistema: {total_promedio_tiempo_sistema / n}")
     
 # Para calcular promedios, puedes usar el código proporcionado anteriormente
+print('varianza: ', np.var([D[i] - A[0][i] for i in range(NA)]))
