@@ -16,6 +16,23 @@ El proyecto debe ser entregado en un repositorio público de GitHub. Este reposi
 ## S2 Detalles de Implementación
 
 - Pasos seguidos para la implementación
+Para modelar el problema e implementar la simulación correspondiente y con ella resolver dicho problema en cuestión debemos definir como sería la misma:
+
+Simulación:
+1. Inicialización del sistema: Se establecen variables para los contadores de clientes en cada servidor (n1, n2), tiempos de eventos (tA, t1, t2), contadores de llegadas y salidas (NA, ND), y listas para almacenar tiempos de eventos (A1, A2, D).
+
+2. Generación de tiempos de llegada: Se utiliza np.random.poisson(param_poisson) para generar el tiempo hasta la próxima llegada de un cliente, basado en el parámetro param_poisson que representa la tasa media de llegada de clientes.
+
+3. Bucle principal: El sistema simula el proceso hasta que el tiempo total de simulación (Total_Time) se excede. Dentro de este bucle, se determina el próximo evento basado en los tiempos de llegada y servicio de los clientes en cada servidor.
+- Llegada de clientes: Si el tiempo de llegada del próximo cliente es menor que los tiempos de servicio de ambos servidores, se registra un evento de llegada, se incrementa el contador de llegadas (NA), y se actualiza el tiempo de llegada del próximo cliente.
+
+- Finalización de servicio en el servidor 1: Si el tiempo de finalización de servicio en el servidor 1 es menor que el tiempo de finalización de servicio en el servidor 2, se registra un evento de finalización de servicio en el servidor 1, se decrementa el contador de clientes en el servidor 1 y se incrementa el contador de clientes en el servidor 2.
+
+- Finalización de servicio en el servidor 2: Si el tiempo de finalización de servicio en el servidor 2 es menor que el tiempo de finalización de servicio en el servidor 1, se registra un evento de finalización de servicio en el servidor 2, se decrementa el contador de clientes en el servidor 2 y se incrementa el contador de salidas (ND).
+
+4. Procesamiento de clientes restantes: Después de que el tiempo de simulación se excede, el sistema procesa cualquier cliente restante en las colas, siguiendo la misma lógica que en el bucle principal.
+
+5. Resultados: Al final, el sistema retorna el número total de clientes atendidos (NA), el tiempo total de simulación (t), los tiempos de llegada de los clientes en cada servidor (A1, A2) y los tiempos de salida (D).
 
 ## S3 Resultados y Experimentos
 
