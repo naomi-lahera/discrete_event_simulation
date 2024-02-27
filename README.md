@@ -45,8 +45,26 @@ El programa proporcionado simula un sistema de servidores en serie con el objeti
 
 ## S3 Resultados y Experimentos
 
-- Hallazgos de la simulación
-- Interpretación de los resultados
+### Hallazgos de la simulación:
+
+- Total de Llegadas (NA): El número total de clientes que llegaron durante la simulación. Este valor es una medida de la carga en el sistema.
+
+- Tiempo Actual (t): El último tiempo en el que se generó un evento. Este valor indica cuánto tiempo se simuló el sistema.
+
+- Tiempos de Llegada (A): Una lista de listas donde cada sublista contiene los tiempos de llegada de los clientes a cada servidor. Esto ayuda a entender cómo se distribuyen los clientes entre los servidores.
+
+- Tiempos de Salida (D): Una lista de los tiempos en los que los clientes fueron atendidos y salieron del sistema. Esto ayuda a entender la eficiencia del sistema en términos de tiempo de espera y tiempo de servicio.
+
+### Interpretación de los resultados
+- En este caso mostramos, por cada simulacion, el tiempo de espera promedio de los clientes en la tienda.
+![](mi_grafica.png)
+- En este caso observamos una comparación entre la media del tiempo en que las simulaciones acabaron, el tiempo que se tenia para mantener el sistema funcionando y los valores reales obtenidos por las simulaciones. Como se puede pareciar, la media se queda por debajo de la hora de cierre.
+![](mi_grafica2.png)
+- En el gráfico que se muestra a continuación es posible apreciar la relación que existe entre la hora de llegada y el tiempo de espera de los clientes en el sistema
+![](mi_grafica3.png)
+- Aqui podemos ver una posible distribución que pueden seguir los tiempos de espera de los clientes en la tienda.
+![](mi_grafica4.png)
+
 - Necesidad de realizar el análisis estadístico de la simulación (Variables de interés)
 - Análisis de parada de la simulación
 
