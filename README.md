@@ -57,13 +57,13 @@ El programa proporcionado simula un sistema de servidores en serie con el objeti
 
 ### Interpretación de los resultados
 - En este caso mostramos, por cada simulacion, el tiempo de espera promedio de los clientes en la tienda.
-![](mi_grafica.png)
+![](.\informe\mi_grafica.png)
 - En este caso observamos una comparación entre la media del tiempo en que las simulaciones acabaron, el tiempo que se tenia para mantener el sistema funcionando y los valores reales obtenidos por las simulaciones. Como se puede pareciar, la media se queda por debajo de la hora de cierre.
-![](mi_grafica2.png)
+![](.\informe\mi_grafica2.png)
 - En el gráfico que se muestra a continuación es posible apreciar la relación que existe entre la hora de llegada y el tiempo de espera de los clientes en el sistema
-![](mi_grafica3.png)
+![](.\informe\mi_grafica3.png)
 - Aqui podemos ver una posible distribución que pueden seguir los tiempos de espera de los clientes en la tienda.
-![](mi_grafica4.png)
+![](.\informe\mi_grafica4.png)
 
 - Necesidad de realizar el análisis estadístico de la simulación (Variables de interés)
 - Análisis de parada de la simulación
