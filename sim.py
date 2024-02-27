@@ -1,6 +1,5 @@
 import numpy as np
-import random
-from statistics import mean
+
 
 def Series_Server(Total_Time, param_poisson, param_Server):    
     # Parámetros del sistema

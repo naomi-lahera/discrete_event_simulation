@@ -1,5 +1,6 @@
 from sim import Series_Server
-
+import random
+from statistics import mean
 total_Na = 0
 total_t = 0
 total_tiempo_faltante = 0
