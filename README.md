@@ -48,7 +48,6 @@ El programa proporcionado simula un sistema de servidores en serie con el objeti
 - Hallazgos de la simulación
 - Interpretación de los resultados
 - Necesidad de realizar el análisis estadístico de la simulación (Variables de interés)
-    - 
 - Análisis de parada de la simulación
     - La simulación se detiene cuando el tiempo total de simulación alcanza el límite establecido (Total_Time) o cuando todos los clientes han sido atendidos (NA == ND). Esto permite modelar sistemas que operan durante un período de tiempo fijo o hasta que se satisfaga un número específico de clientes.
 
