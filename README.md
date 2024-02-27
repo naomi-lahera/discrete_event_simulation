@@ -67,41 +67,29 @@ El programa proporcionado simula un sistema de servidores en serie con el objeti
 
 - Necesidad de realizar el análisis estadístico de la simulación (Variables de interés)
 - Análisis de parada de la simulación
+    - La simulación se detiene cuando el tiempo total de simulación alcanza el límite establecido (Total_Time) o cuando todos los clientes han sido atendidos (NA == ND). Esto permite modelar sistemas que operan durante un período de tiempo fijo o hasta que se satisfaga un número específico de clientes.
+
+    Este modelo es útil para entender cómo se comporta un sistema bajo diferentes condiciones de carga y puede informar decisiones sobre la optimización de la  configuración del sistema, como el número de servidores o la tasa de llegada de clientes.
 
 ## S4 Modelo Matemático
 
 - Descripción del modelo de simulación
+    El modelo asociado al sistema a simular se asemeja a la estructura de un sistema de colas de servidores en serie con tiempos de servicio variable (Variable Service Time, VST), que es una extensión de los modelos de colas de M/M/c.
+
+    - M/M/c 
+        Los modelos M/M/c son una clase de modelos matemáticos que se utilizan para describir sistemas donde los clientes llegan a una cola de servidores, donde    cada servidor puede atender a un solo cliente a la vez.
+        - M representa el modelo de interarrival de Markov, que indica que el tiempo entre llegadas de clientes sigue una distribución de Poisson, lo significa que los clientes llegan de manera independiente y a una tasa constante promedio.
+        - M (el segundo M) indica que el modelo de servicio es Markov, lo que significa que el tiempo que un servidor tarda en atender a un cliente sigue una distribución exponencial, donde los tiempos de servicio son independientes entre sí y tienen una media constante.
+        - c es el número de servidores en el sistema. Este parámetro indica cuántos servidores pueden atender a los clientes simultáneamente.
+        Este modelo es particularmente útil para analizar el comportamiento de sistemas con un número fijo de servidores y clientes que llegan a una tasa constante; puede utilizarse para calcular varias métricas importantes del sistema, el tiempo promedio que un cliente pasa en el sistema (W), y la probabilidad de que haya (n) clientes en el sistema (Pn).
+
 - Supuestos y restricciones
-
-
-## Ejercicio a resolver: n servidores en serie
-
-Los clientes llegan a un sistema que tiene n servidores, y las llegadas distribuye M. Cada cliente que llega debe ser atendido primero por el servidor 1 y, al completar el servicio en el servidor 1, el cliente pasa al servidor 2.
-
-Cuando un cliente llega, entra en servicio con el servidor 1 si ese servidor está libre, o se une a la cola del servidor 1 en caso contrario. De manera similar, cuando el cliente completa el servicio en el servidor 1, entra en servicio con el servidor 2 si ese servidor está libre, o se une a su cola y asi sucesivamente. Después de ser atendido en el servidor n, el cliente abandona el sistema.
-
-Los tiempos de servicio en el servidor i tienen la distribución Gi.
-
-
-## S1 Introducción
-
-- Breve descripción del proyecto
-    En el presente proyecto simularemos n servidores conectados en serie, con el siguiente funcionamiento:
-    Cuando un cliente llega, entra en servicio con el servidor i si ese servidor está libre, o se une a la cola del servidor i en caso contrario. Luego al terminar el servicio en el servidor i pasa al servidor i + 1. Luego de consumir el servicio de los n servidores el cliente abandona el sisitema.
-
-- Objetivos y metas
-    Nuestro objetivo al simular esta sistema es saber la media del tiempo que le toma a un cliente entrar y salir del sistema, así como la noción del rango de timepo que excede la salida del último cliente.
-
-- El sistema específico a simular y las variables de interés que cada equipo debe analizar se les hará saber por esta misma vía.
-    - sistema: n servidores en serie
-    - variables de interes: 
-        - NA: Cantidad de clientes que entraron al sistema
-        - A: Tiempo en el que los clientes entran a acada servidor
-        - D: Tiempo en que los clientes alen del sistema
-        - t: Tiempo que toma hacer la simulacion
-
-- Variables que describen el problema
-    - n: cantidad de servidores
-    - M: Distribucion asociada a la llegada de los clientes
-    - Gi: Distribucion asociada al tiempo de que le toma al servidor i atender a un clinete.
+    - Supuestos:
+        - Distribución de llegadas (M): Se asume que las llegadas de clientes siguen una distribución específica M. Esto implica que el número de clientes que llegan al  sistema en un intervalo de tiempo específico sigue una distribución determinada.
+        - Tiempos de servicio (Gi): Se asume que los tiempos de servicio en cada uno de los servidores i siguen una distribución específica Gi. Esto significa que    el     tiempo que cada cliente pasa en el servidor i es variable y sigue una distribución estadística determinada.
+        - Servidores en serie: Se asume que los servidores están dispuestos en serie, lo que significa que un cliente debe pasar por cada servidor en orden, desde    el     servidor 1 hasta el servidor n, antes de abandonar el sistema.
+        Colas: Se asume que cada servidor tiene una cola de clientes. Si un servidor está ocupado cuando un cliente llega, el cliente se une a la cola del  - servidor     correspondiente.
+    - Restricciones:
+        - Sin Capacidad de Los Servidores: El modelo no implementa una restricción explícita sobre la capacidad de los servidores. Aunque se mantiene un contador de      clientes en servicio para cada servidor, no se aplica una restricción que evite que un servidor atienda a más clientes de lo que podría manejar.
+        - Tiempo de Simulación: La simulación continúa hasta que se alcanza el tiempo total especificado (Total_Time) o hasta que todos los clientes han sido atendidos.
     
