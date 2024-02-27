@@ -67,11 +67,11 @@ El programa proporcionado simula un sistema de servidores en serie con el objeti
 
 - Supuestos y restricciones
     - Supuestos:
+        - Distribución de llegadas (M): Se asume que las llegadas de clientes siguen una distribución específica M. Esto implica que el número de clientes que llegan al  sistema en un intervalo de tiempo específico sigue una distribución determinada.
         - Tiempos de servicio (Gi): Se asume que los tiempos de servicio en cada uno de los servidores i siguen una distribución específica Gi. Esto significa que    el     tiempo que cada cliente pasa en el servidor i es variable y sigue una distribución estadística determinada.
         - Servidores en serie: Se asume que los servidores están dispuestos en serie, lo que significa que un cliente debe pasar por cada servidor en orden, desde    el     servidor 1 hasta el servidor n, antes de abandonar el sistema.
         Colas: Se asume que cada servidor tiene una cola de clientes. Si un servidor está ocupado cuando un cliente llega, el cliente se une a la cola del  - servidor     correspondiente.
     - Restricciones:
-        - Distribución de llegadas (M): Se asume que las llegadas de clientes siguen una distribución específica M. Esto implica que el número de clientes que llegan al  sistema en un intervalo de tiempo específico sigue una distribución determinada, lo que afecta la probabilidad de llegada y la demanda del sistema.
         - Sin Capacidad de Los Servidores: El modelo no implementa una restricción explícita sobre la capacidad de los servidores. Aunque se mantiene un contador de      clientes en servicio para cada servidor, no se aplica una restricción que evite que un servidor atienda a más clientes de lo que podría manejar.
         - Tiempo de Simulación: La simulación continúa hasta que se alcanza el tiempo total especificado (Total_Time) o hasta que todos los clientes han sido atendidos.
     
