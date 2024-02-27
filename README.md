@@ -65,8 +65,17 @@ El programa proporcionado simula un sistema de servidores en serie con el objeti
 - Aqui podemos ver una posible distribución que pueden seguir los tiempos de espera de los clientes en la tienda.
 ![](.\informe\mi_grafica4.png)
 
-- Necesidad de realizar el análisis estadístico de la simulación (Variables de interés)
-- Análisis de parada de la simulación
+### Necesidad de realizar el análisis estadístico de la simulación (Variables de interés)
+Se realizaron los análisis estadísticos a los siguientes elementos y, en el ejemplo puesto a prueba se obtuvieron los siguientes resultados:
+
+Media de los tiempos finales de las simulaciones: 407.1513282382613
+Varianza de los tiempos finales de las simulaciones: 5832.541171540937
+Media de tiempo faltante: -72.84867176173869
+Varianza de tiempo faltante: 5832.5411715409355
+Media de tiempo de un cliente en el sistema: 95.8542934243079
+Varianza de tiempo de un cliente en el sistema: 1549.878679857592
+
+### Análisis de parada de la simulación
     - La simulación se detiene cuando el tiempo total de simulación alcanza el límite establecido (Total_Time) o cuando todos los clientes han sido atendidos (NA == ND). Esto permite modelar sistemas que operan durante un período de tiempo fijo o hasta que se satisfaga un número específico de clientes.
 
     Este modelo es útil para entender cómo se comporta un sistema bajo diferentes condiciones de carga y puede informar decisiones sobre la optimización de la  configuración del sistema, como el número de servidores o la tasa de llegada de clientes.
