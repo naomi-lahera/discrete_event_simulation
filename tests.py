@@ -1,4 +1,5 @@
 from sim import Series_Server
+import numpy as np
 import random
 from statistics import mean
 total_Na = 0
