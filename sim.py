@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def Series_Server(Total_Time, param_poisson, param_Server):    
     # Parámetros del sistema
     n_servidores = len(param_Server)  # Número de servidores
@@ -82,4 +81,3 @@ def Series_Server(Total_Time, param_poisson, param_Server):
                 t_eventos[servidor_actual + 1] = t + Y
                 
     return NA, t, A, D
-
